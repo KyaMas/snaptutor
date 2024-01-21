@@ -2,15 +2,25 @@ import os
 
 from flask import Flask, redirect, render_template, request, url_for
 from openai import OpenAI
-import assembly as assemblyai
+import assemblyai as aai
+import asyncio
+import websocket
+import json
+from flask_socketio import SocketIO, send, emit
+from threading import Thread
+import pyaudio
+
+
 
 client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
 )
-aai.settings.api_key = "dcebad47486340d59b89946e616c9a2c"
+#set up assembly api key
+ASSEMBLYAI_API_KEY = os.environ.get("ASSEMBLYAI_API_KEY")
 
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 
 
 @app.route("/", methods=("GET", "POST"))
@@ -30,9 +40,37 @@ def index():
     result = request.args.get("result")
     return render_template("index.html", result=result)
 
-transcriber = aai.Transcriber()
+# speach to text transcriber 
+@app.route('/', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            return 'No file part'
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            return 'No selected file'
+        if file:
+            filename = os.path.join('/tmp', file.filename)
+            file.save(filename)
+            transcriber = aai.Transcriber()
+            transcript = transcriber.transcribe(filename)
+            return transcript.text
+    return render_template('index.html')
 
-transcript = transcriber.transcribe("https://storage.googleapis.com/aai-web-samples/news.mp4")
-# transcript = transcriber.transcribe("./my-local-audio-file.wav")
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+FILE_URL = "https://github.com/AssemblyAI-Examples/audio-examples/raw/main/20230607_me_canadian_wildfires.mp3"
+
+# You can also transcribe a local file by passing in a file path
+# FILE_URL = './path/to/file.mp3'
+
+transcriber = aai.Transcriber()
+transcript = transcriber.transcribe(FILE_URL)
 
 print(transcript.text)
+

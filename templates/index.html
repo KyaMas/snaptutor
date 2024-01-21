@@ -19,20 +19,21 @@
   {% if result %}
   <div class="result">{{ result }}</div>
   {% endif %}
-  <button onclick="startFunction()">Start</button>
-  <button onclick="restartFunction()">Restart</button>
-  <button onclick="stopFunction()">Stop</button>
 </body>
-<script>
-  function startFunction() {
-      // Implement start functionality
-  }
 
-  function restartFunction() {
-      // Implement restart functionality
-  }
 
-  function stopFunction() {
-      // Implement stop functionality
-  }
-</script>
+<form>
+<!doctype html>
+<html>
+  <head>
+    <title>Upload new File</title>
+  </head>
+  <body>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+  </body>
+</html>
+</form>
