@@ -10,13 +10,29 @@
 
 <body>
   <img src="{{ url_for('static', filename='book.PNG') }}" class="icon" />
-  <h3>Reflection assessor</h3>
-  <h5>Enter a reflection on one of the textbook chapters below. OpenAI will assess your response in terms of 1) spelling and grammar and 2) the overall quality of your reflection.</h5>
-  <form action="/" method="post">
-    <textarea name="reflection" placeholder="Enter your reflection" required /></textarea>
-    <input type="submit" value="Provide reflection" />
+  <h3>Reading Tool</h3>
+  <h5>Enter your reading level below. OpenAI will generate a script for you to read.</h5>
+  <form action="{{ url_for('index') }}" method="POST">
+    <textarea name="Reading-level" placeholder="Enter your reading level" required class="my-textarea" /></textarea>
+    <input type="submit" value="Generate" class="small-button"/>
   </form>
   {% if result %}
   <div class="result">{{ result }}</div>
   {% endif %}
+  <button onclick="startFunction()">Start</button>
+  <button onclick="restartFunction()">Restart</button>
+  <button onclick="stopFunction()">Stop</button>
 </body>
+<script>
+  function startFunction() {
+      // Implement start functionality
+  }
+
+  function restartFunction() {
+      // Implement restart functionality
+  }
+
+  function stopFunction() {
+      // Implement stop functionality
+  }
+</script>
